@@ -6,17 +6,8 @@ A vintage postcard-inspired personal website built with Next.js 14, TypeScript, 
 
 - **Home** — Animated hero with navigation cards
 - **Runs** — Interactive Leaflet map with running routes. Click routes or cards to open postcard-style modals with photos and reflections
-- **Shelf** — Grid of "learning objects" with emoji, concept labels, and pastel backgrounds. Click to open detail modals
+- **Shelf** — Freeform "scattered objects" canvas (inspired by editorial/catalogue design). Objects are placed at custom positions with varying sizes and rotations. Click any object for details
 - **About** — Personal bio and contact links
-
-## Tech Stack
-
-- **Next.js 14** (App Router)
-- **TypeScript**
-- **Tailwind CSS** — Warm vintage color palette (cream, soft blue, charcoal, tan)
-- **Framer Motion** — Page transitions, hover effects, modal animations
-- **Leaflet** — Interactive map with route polylines
-- **Fonts** — Crimson Pro (serif headings) + Karla (sans-serif body)
 
 ## Getting Started
 
@@ -36,53 +27,75 @@ npm start
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## Customizing
+---
 
-### Runs
+## How to Edit
 
-Edit `src/data/runs.ts` to add your own runs. Each run has:
+All your personal content lives in two data files. You don't need to touch any component code.
 
-```ts
-{
-  id: string;           // Unique identifier
-  location: string;     // Display name (e.g., "Annecy, France")
-  date: string;         // Display date
-  coordinates: [number, number][]; // GPS points for the route polyline
-  photoUrl: string;     // Image URL for the postcard
-  thoughts: string;     // Your reflection/quote
-  distance: string;     // Distance label
-  color: string;        // Route color (hex)
-}
-```
+### Editing the Shelf (`src/data/shelf.ts`)
 
-### Shelf
-
-Edit `src/data/shelf.ts` to add your own objects. Each item has:
+Open the file — there's a detailed comment block at the top explaining every field. Here's the quick version:
 
 ```ts
 {
-  id: string;           // Unique identifier
-  emoji: string;        // Display emoji
-  name: string;         // Object name
-  concept: string;      // Concept label
-  description: string;  // Longer description for the modal
-  bgColor: string;      // Pastel background color (hex)
+  id: "apple",              // unique identifier
+  emoji: "🍎",              // displayed on the canvas
+  name: "Apple",            // shown on hover + in the modal
+  concept: "Gravity",       // subtitle label
+  description: "Newton...", // longer text for the modal
+  position: { x: 5, y: 4 },// placement on canvas (% from left, % from top)
+  size: "lg",               // "sm" | "md" | "lg"
+  rotation: -3,             // tilt in degrees (optional, default 0)
+  imageUrl: "/images/a.png" // optional — replaces emoji with a real image
 }
 ```
 
-### Colors
+**To add a new object:** copy any block in the array, give it a new `id`, and pick a `position` that doesn't overlap too much with others. Values for `x` should stay between 2–88, and `y` between 2–90.
 
-Edit `tailwind.config.ts` to change the color palette:
+**To use real images instead of emojis:**
+1. Drop your image into `public/images/`
+2. Set `imageUrl: "/images/your-file.png"` on the item
+3. The emoji field is ignored when imageUrl is present
 
-- `cream` — Background
-- `soft-blue` — Accent
-- `charcoal` — Text
-- `tan` — Links and decorative elements
-- `warm-gray` — Secondary text
+**Mobile:** On screens < 768px the freeform layout switches to a wrapped flex grid, so positions are only used on desktop.
 
-### About
+### Editing Runs (`src/data/runs.ts`)
 
-Edit `src/app/about/page.tsx` to update your bio and contact links.
+Each run has:
+
+```ts
+{
+  id: "annecy",
+  location: "Annecy, France",
+  date: "June 2025",
+  coordinates: [[45.899, 6.129], ...], // GPS points for the polyline
+  photoUrl: "https://...",             // image shown in the postcard modal
+  thoughts: "First time...",           // your reflection
+  distance: "8.2 km",
+  color: "#C19A6B"                     // route color on the map
+}
+```
+
+**To add a run:** copy a block, change the `id`, and fill in your data. GPS coordinates can come from Strava GPX exports or any route-drawing tool.
+
+### Editing the About page
+
+Edit `src/app/about/page.tsx` directly — it's plain JSX with your bio text and contact links.
+
+### Changing colors
+
+Edit `tailwind.config.ts`:
+
+| Token        | Used for                     |
+|-------------|------------------------------|
+| `cream`     | Page background              |
+| `soft-blue` | Accent color                 |
+| `charcoal`  | Primary text                 |
+| `tan`       | Links, decorative elements   |
+| `warm-gray` | Secondary/muted text         |
+
+---
 
 ## Project Structure
 
@@ -93,7 +106,7 @@ src/
 │   ├── page.tsx            # Home page
 │   ├── globals.css         # Global styles + paper texture
 │   ├── runs/page.tsx       # Runs page
-│   ├── shelf/page.tsx      # Shelf page
+│   ├── shelf/page.tsx      # Shelf page (freeform canvas)
 │   └── about/page.tsx      # About page
 ├── components/
 │   ├── Navigation.tsx      # Fixed top nav
@@ -101,13 +114,22 @@ src/
 │   ├── runs/
 │   │   ├── RunMap.tsx      # Leaflet map
 │   │   ├── RunCard.tsx     # Run preview card
-│   │   └── PostcardModal.tsx # Postcard overlay
+│   │   └── PostcardModal.tsx
 │   └── shelf/
-│       ├── ShelfCard.tsx   # Shelf grid card
-│       └── ShelfModal.tsx  # Shelf detail modal
+│       ├── ShelfCard.tsx   # Freeform positioned object
+│       └── ShelfModal.tsx  # Object detail modal
 ├── data/
-│   ├── runs.ts             # Sample run data
-│   └── shelf.ts            # Sample shelf data
+│   ├── runs.ts             # ← EDIT THIS for your runs
+│   └── shelf.ts            # ← EDIT THIS for your shelf
 └── types/
     └── index.ts            # TypeScript interfaces
 ```
+
+## Tech Stack
+
+- **Next.js 14** (App Router)
+- **TypeScript**
+- **Tailwind CSS** — Warm vintage palette
+- **Framer Motion** — Animations
+- **Leaflet** — Interactive map
+- **Fonts** — Crimson Pro (serif) + Karla (sans-serif)
