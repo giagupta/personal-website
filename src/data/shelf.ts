@@ -1,31 +1,35 @@
 import { ShelfItem } from "@/types";
 
-/**
- * ============================================================
- *  SHELF ITEMS — edit this array to customize your shelf page
- * ============================================================
- *
- *  Each item is an object scattered on a freeform canvas.
- *
- *  Fields:
- *    id          — unique string (used as React key)
- *    emoji       — emoji shown on the canvas (ignored if imageUrl is set)
- *    name        — object name shown on hover and in the modal
- *    concept     — short label (e.g. "Gravity") shown below the name
- *    description — longer text shown inside the modal
- *    position    — { x, y } as percentages (0–100) of the canvas
- *                  x = distance from left edge, y = distance from top
- *    size        — "sm" | "md" | "lg" — controls emoji/image size
- *    rotation    — optional tilt in degrees (negative = counter-clockwise)
- *    imageUrl    — optional URL to a real image (replaces the emoji)
- *
- *  Tips:
- *    - To add a new item: copy any block below, change the id, and adjust position
- *    - Positions are responsive — the canvas scales to fit the viewport
- *    - Keep x values between 2–88 and y values between 2–90 to stay in bounds
- *    - On mobile, items reflow into a wrapped layout (positions are ignored)
- *    - To use real images: add files to /public/images/ and set
- *      imageUrl to "/images/your-file.png"
+/*
+ * ╔══════════════════════════════════════════════════════════════╗
+ * ║  HOW TO EDIT YOUR SHELF                                     ║
+ * ╠══════════════════════════════════════════════════════════════╣
+ * ║                                                              ║
+ * ║  Each object below appears on your Shelf page.               ║
+ * ║  To change what's on your shelf, just edit this array.       ║
+ * ║                                                              ║
+ * ║  DON'T LIKE THE EMOJIS? Two options:                         ║
+ * ║                                                              ║
+ * ║  Option A — Pick a different emoji:                          ║
+ * ║    emoji: "🎸"    ← just change the emoji                   ║
+ * ║                                                              ║
+ * ║  Option B — Use your own image instead:                      ║
+ * ║    1. Put your image in the public/images/ folder            ║
+ * ║       (e.g. public/images/guitar.png)                        ║
+ * ║    2. Add this field to the item:                            ║
+ * ║       imageUrl: "/images/guitar.png"                         ║
+ * ║    3. The emoji is ignored when imageUrl is set              ║
+ * ║                                                              ║
+ * ║  TO ADD A NEW ITEM: copy any block, change the id            ║
+ * ║  TO REMOVE AN ITEM: delete its entire { ... } block          ║
+ * ║                                                              ║
+ * ║  POSITION GUIDE (desktop only, mobile auto-wraps):           ║
+ * ║    position.x = % from left edge (keep between 2–88)         ║
+ * ║    position.y = % from top edge  (keep between 2–90)         ║
+ * ║    size = "sm" | "md" | "lg"                                 ║
+ * ║    rotation = tilt in degrees (e.g. -5, 0, 8)                ║
+ * ║                                                              ║
+ * ╚══════════════════════════════════════════════════════════════╝
  */
 
 export const shelfItems: ShelfItem[] = [
@@ -39,6 +43,7 @@ export const shelfItems: ShelfItem[] = [
     position: { x: 5, y: 4 },
     size: "lg",
     rotation: -3,
+    // imageUrl: "/images/apple.png",  ← uncomment & add your image
   },
   {
     id: "compass",

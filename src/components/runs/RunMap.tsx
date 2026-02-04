@@ -24,7 +24,7 @@ export default function RunMap({ runs, onSelectRun }: RunMapProps) {
         zoomControl: false,
       });
 
-      // Warm vintage-toned map tiles (CartoDB Voyager)
+      // Warm vintage map tiles
       L.tileLayer(
         "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
         {
@@ -35,49 +35,46 @@ export default function RunMap({ runs, onSelectRun }: RunMapProps) {
         }
       ).addTo(map);
 
-      // Zoom control bottom-right
       L.control.zoom({ position: "bottomright" }).addTo(map);
 
-      runs.forEach((run) => {
-        // Dashed route polyline
-        const polyline = L.polyline(run.coordinates, {
+      // Deterministic tilt per run
+      const tilts = [-4, 3, -2, 5, -6, 2, -3, 4, -5, 1];
+
+      runs.forEach((run, i) => {
+        // Route polyline
+        L.polyline(run.coordinates, {
           color: run.color,
           weight: 3,
-          opacity: 0.5,
+          opacity: 0.45,
           smoothFactor: 1,
-          dashArray: "8 6",
         }).addTo(map);
 
-        // Photo thumbnail marker at route start
-        const startPoint = run.coordinates[0];
-        const photoIcon = L.divIcon({
-          className: "photo-marker-wrap",
+        // Photo marker at start of route
+        const start = run.coordinates[0];
+        const tilt = tilts[i % tilts.length];
+
+        const icon = L.divIcon({
+          className: "run-photo-pin",
           html: `
-            <div class="photo-marker">
+            <div class="run-photo-frame" style="transform:rotate(${tilt}deg)">
               <img src="${run.photoUrl}" alt="${run.location}" />
+              <span class="run-photo-city">${run.location.split(",")[0]}</span>
             </div>
-            <div class="photo-marker-label">${run.location.split(",")[0]}</div>
           `,
-          iconSize: [72, 80],
-          iconAnchor: [36, 36],
+          iconSize: [110, 130],
+          iconAnchor: [55, 65],
         });
 
-        const marker = L.marker(startPoint, { icon: photoIcon }).addTo(map);
-        marker.on("click", () => onSelectRun(run));
-
-        polyline.on("click", () => onSelectRun(run));
-        polyline.on("mouseover", () => {
-          polyline.setStyle({ opacity: 0.9, weight: 4, dashArray: "" });
-        });
-        polyline.on("mouseout", () => {
-          polyline.setStyle({ opacity: 0.5, weight: 3, dashArray: "8 6" });
-        });
+        L.marker(start, { icon }).addTo(map).on("click", () => onSelectRun(run));
       });
 
-      // Fit map to all routes
-      const allCoords = runs.flatMap((r) => r.coordinates);
-      if (allCoords.length) {
-        map.fitBounds(L.latLngBounds(allCoords), { padding: [50, 50] });
+      // Fit to routes
+      const pts = runs.flatMap((r) => r.coordinates);
+      if (pts.length) {
+        map.fitBounds(L.latLngBounds(pts), {
+          padding: [60, 60],
+          maxZoom: 6,
+        });
       }
 
       setMapReady(true);
@@ -87,17 +84,15 @@ export default function RunMap({ runs, onSelectRun }: RunMapProps) {
   }, [runs, onSelectRun]);
 
   return (
-    <div className="relative">
+    <div className="relative run-map-container">
       <div
         id="run-map"
         className="w-full rounded-lg"
-        style={{ height: "72vh", minHeight: 500, background: "#e8e4dc" }}
+        style={{ height: "70vh", minHeight: 480, background: "#ece6db" }}
       />
       {!mapReady && (
         <div className="absolute inset-0 flex items-center justify-center bg-cream/80 rounded-lg">
-          <p className="text-sm text-warm-gray animate-pulse">
-            Loading map...
-          </p>
+          <p className="text-sm text-warm-gray animate-pulse">Loading map...</p>
         </div>
       )}
     </div>

@@ -1,5 +1,33 @@
 import { Run } from "@/types";
 
+/*
+ * ╔══════════════════════════════════════════════════════════════╗
+ * ║  HOW TO EDIT YOUR RUNS                                      ║
+ * ╠══════════════════════════════════════════════════════════════╣
+ * ║                                                              ║
+ * ║  Each object below is one run on the map.                    ║
+ * ║                                                              ║
+ * ║  TO CHANGE A PHOTO:                                          ║
+ * ║    - Use any image URL, or put images in public/images/      ║
+ * ║      and use photoUrl: "/images/my-run.jpg"                  ║
+ * ║                                                              ║
+ * ║  TO CHANGE THE THOUGHTS / NOTES:                             ║
+ * ║    - Edit the "thoughts" field — it shows as the quote       ║
+ * ║      in the postcard modal when someone clicks a photo       ║
+ * ║                                                              ║
+ * ║  TO ADD A NEW RUN:                                           ║
+ * ║    1. Copy any block below                                   ║
+ * ║    2. Change the id to something unique                      ║
+ * ║    3. Update location, date, photoUrl, thoughts, distance    ║
+ * ║    4. Set coordinates to GPS points along your route         ║
+ * ║       (export from Strava, or hand-pick from Google Maps)    ║
+ * ║    5. Pick a color for the route line (any hex color)        ║
+ * ║                                                              ║
+ * ║  TO REMOVE A RUN: delete its entire { ... } block            ║
+ * ║                                                              ║
+ * ╚══════════════════════════════════════════════════════════════╝
+ */
+
 export const runs: Run[] = [
   {
     id: "annecy-lake",
@@ -17,7 +45,8 @@ export const runs: Run[] = [
       [45.877, 6.133],
       [45.875, 6.130],
     ],
-    photoUrl: "https://images.unsplash.com/photo-1530841377377-3ff06c0ca713?w=600&q=80",
+    photoUrl:
+      "https://images.unsplash.com/photo-1530841377377-3ff06c0ca713?w=600&q=80",
     thoughts:
       "Running along the lake at sunrise, the Alps reflecting perfectly in the still water. This is what it feels like to be completely present.",
     distance: "5.2 km",
@@ -39,7 +68,8 @@ export const runs: Run[] = [
       [48.854, 2.330],
       [48.852, 2.334],
     ],
-    photoUrl: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600&q=80",
+    photoUrl:
+      "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600&q=80",
     thoughts:
       "Crossing bridges at dawn, each one a different era of the city. The Seine was misty and golden. Paris rewards those who wake early.",
     distance: "8.1 km",
@@ -61,7 +91,8 @@ export const runs: Run[] = [
       [35.682, 139.746],
       [35.685, 139.749],
     ],
-    photoUrl: "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=600&q=80",
+    photoUrl:
+      "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=600&q=80",
     thoughts:
       "The Imperial Palace loop: perfectly maintained paths, cherry blossoms just starting to fall. Every runner I passed gave a small nod.",
     distance: "5.0 km",
@@ -72,18 +103,19 @@ export const runs: Run[] = [
     location: "Lisbon, Portugal",
     date: "March 10, 2025",
     coordinates: [
-      [38.714, -9.140],
+      [38.714, -9.14],
       [38.712, -9.137],
-      [38.710, -9.134],
+      [38.71, -9.134],
       [38.712, -9.131],
       [38.714, -9.128],
       [38.716, -9.125],
       [38.718, -9.128],
       [38.716, -9.131],
       [38.714, -9.134],
-      [38.714, -9.140],
+      [38.714, -9.14],
     ],
-    photoUrl: "https://images.unsplash.com/photo-1585208798174-6cedd86e019a?w=600&q=80",
+    photoUrl:
+      "https://images.unsplash.com/photo-1585208798174-6cedd86e019a?w=600&q=80",
     thoughts:
       "Lisbon's seven hills are no joke. Cobblestones, trams, and the most stunning rooftop views as a reward. My calves will never forgive me.",
     distance: "6.7 km",
@@ -96,16 +128,17 @@ export const runs: Run[] = [
     coordinates: [
       [40.764, -73.973],
       [40.767, -73.971],
-      [40.770, -73.968],
+      [40.77, -73.968],
       [40.773, -73.966],
       [40.776, -73.969],
       [40.779, -73.971],
       [40.776, -73.974],
       [40.773, -73.976],
-      [40.770, -73.975],
+      [40.77, -73.975],
       [40.764, -73.973],
     ],
-    photoUrl: "https://images.unsplash.com/photo-1534430480872-3498386e7856?w=600&q=80",
+    photoUrl:
+      "https://images.unsplash.com/photo-1534430480872-3498386e7856?w=600&q=80",
     thoughts:
       "Valentine's Day in Central Park. Freezing cold, breath visible, but the park was alive with runners. We're all a little crazy, and I love it.",
     distance: "7.3 km",
@@ -117,17 +150,18 @@ export const runs: Run[] = [
     date: "January 20, 2025",
     coordinates: [
       [41.381, 2.189],
-      [41.380, 2.193],
+      [41.38, 2.193],
       [41.378, 2.197],
       [41.376, 2.201],
       [41.374, 2.205],
-      [41.372, 2.200],
+      [41.372, 2.2],
       [41.374, 2.196],
       [41.376, 2.192],
       [41.378, 2.189],
       [41.381, 2.189],
     ],
-    photoUrl: "https://images.unsplash.com/photo-1583422409516-2895a77efded?w=600&q=80",
+    photoUrl:
+      "https://images.unsplash.com/photo-1583422409516-2895a77efded?w=600&q=80",
     thoughts:
       "Barceloneta at sunset. Sand between my toes, salt in the air. Ended the run with my feet in the Mediterranean. This is the life.",
     distance: "4.8 km",

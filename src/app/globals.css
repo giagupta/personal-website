@@ -82,61 +82,58 @@
   background: #a89f91;
 }
 
-/* Leaflet overrides */
+/* ─── Leaflet overrides ─── */
 .leaflet-container {
   font-family: "Karla", sans-serif !important;
   border-radius: 8px;
 }
 
-.leaflet-popup-content-wrapper {
-  border-radius: 4px !important;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1) !important;
-  font-family: "Karla", sans-serif !important;
+/* Warm vintage tint on map tiles */
+.run-map-container .leaflet-tile-pane {
+  filter: sepia(0.2) saturate(0.82) brightness(1.06) hue-rotate(-10deg);
 }
 
-.leaflet-popup-content {
-  margin: 8px 12px !important;
-  font-size: 14px !important;
-}
-
-/* Photo markers on map — Apple Photos style */
-.photo-marker-wrap {
+/* ─── Scrapbook photo markers pinned on the map ─── */
+.run-photo-pin {
   background: none !important;
   border: none !important;
 }
 
-.photo-marker {
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  border: 3px solid white;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.22);
-  overflow: hidden;
+.run-photo-frame {
+  width: 96px;
+  background: white;
+  padding: 5px 5px 22px 5px;
+  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.18), 0 1px 4px rgba(0, 0, 0, 0.1);
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  margin: 0 auto;
+  transition: transform 0.2s ease, box-shadow 0.25s ease;
+  position: relative;
 }
 
-.photo-marker img {
+.run-photo-frame img {
   width: 100%;
-  height: 100%;
+  height: 68px;
   object-fit: cover;
   display: block;
 }
 
-.photo-marker:hover {
-  transform: scale(1.18);
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.3);
-}
-
-.photo-marker-label {
+.run-photo-city {
+  position: absolute;
+  bottom: 4px;
+  left: 0;
+  right: 0;
   text-align: center;
-  margin-top: 3px;
   font-family: "Crimson Pro", serif;
   font-size: 11px;
   font-style: italic;
-  color: #2c2c2c;
-  opacity: 0.7;
+  color: #3a3a3a;
   white-space: nowrap;
-  pointer-events: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 4px;
+}
+
+.run-photo-frame:hover {
+  transform: rotate(0deg) scale(1.15) !important;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.22), 0 2px 6px rgba(0, 0, 0, 0.12);
+  z-index: 1000 !important;
 }
