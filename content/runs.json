@@ -7,7 +7,11 @@
     "thoughts": "Running along the lake at sunrise, the Alps reflecting perfectly in the still water. This is what it feels like to be completely present.",
     "distance": "5.2 km",
     "color": "#7BA7BC",
-    "coordinates": [[45.899, 6.129]]
+    "coordinates": [[45.899, 6.129]],
+    "links": [
+      { "label": "The Ezra Klein Show — On Solitude", "url": "https://example.com/podcast1", "type": "podcast" },
+      { "label": "Running in the Alps — Trail & Kale", "url": "https://example.com/article1", "type": "article" }
+    ]
   },
   {
     "id": "paris-seine",
@@ -17,7 +21,10 @@
     "thoughts": "Crossing bridges at dawn, each one a different era of the city. The Seine was misty and golden. Paris rewards those who wake early.",
     "distance": "8.1 km",
     "color": "#C4A882",
-    "coordinates": [[48.858, 2.294]]
+    "coordinates": [[48.858, 2.294]],
+    "links": [
+      { "label": "Bon Iver — Holocene", "url": "https://example.com/music1", "type": "music" }
+    ]
   },
   {
     "id": "tokyo-imperial",
@@ -27,7 +34,11 @@
     "thoughts": "The Imperial Palace loop: perfectly maintained paths, cherry blossoms just starting to fall. Every runner I passed gave a small nod.",
     "distance": "5.0 km",
     "color": "#C9A9A6",
-    "coordinates": [[35.685, 139.749]]
+    "coordinates": [[35.685, 139.749]],
+    "links": [
+      { "label": "Haruki Murakami — What I Talk About When I Talk About Running", "url": "https://example.com/article2", "type": "article" },
+      { "label": "Nujabes — Feather", "url": "https://example.com/music2", "type": "music" }
+    ]
   },
   {
     "id": "lisbon-hills",
@@ -37,7 +48,10 @@
     "thoughts": "Lisbon's seven hills are no joke. Cobblestones, trams, and the most stunning rooftop views as a reward. My calves will never forgive me.",
     "distance": "6.7 km",
     "color": "#D4B96A",
-    "coordinates": [[38.714, -9.14]]
+    "coordinates": [[38.714, -9.14]],
+    "links": [
+      { "label": "Rich Roll Podcast — Ultra Endurance", "url": "https://example.com/podcast2", "type": "podcast" }
+    ]
   },
   {
     "id": "new-york-central",
@@ -47,7 +61,8 @@
     "thoughts": "Valentine's Day in Central Park. Freezing cold, breath visible, but the park was alive with runners. We're all a little crazy, and I love it.",
     "distance": "7.3 km",
     "color": "#A3B5A6",
-    "coordinates": [[40.764, -73.973]]
+    "coordinates": [[40.764, -73.973]],
+    "links": []
   },
   {
     "id": "barcelona-beach",
@@ -57,6 +72,10 @@
     "thoughts": "Barceloneta at sunset. Sand between my toes, salt in the air. Ended the run with my feet in the Mediterranean. This is the life.",
     "distance": "4.8 km",
     "color": "#7BA7BC",
-    "coordinates": [[41.381, 2.189]]
+    "coordinates": [[41.381, 2.189]],
+    "links": [
+      { "label": "Radiolab — Cities", "url": "https://example.com/podcast3", "type": "podcast" },
+      { "label": "Fleet Foxes — Sun It Rises", "url": "https://example.com/music3", "type": "music" }
+    ]
   }
 ]

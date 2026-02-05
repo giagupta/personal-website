@@ -1,3 +1,9 @@
+export interface RunLink {
+  label: string;
+  url: string;
+  type?: "podcast" | "article" | "music" | "other";
+}
+
 export interface Run {
   id: string;
   location: string;
@@ -8,6 +14,8 @@ export interface Run {
   thoughts: string;
   distance: string;
   color: string;
+  /** Links to podcasts, articles, music, etc. from the run. */
+  links?: RunLink[];
 }
 
 export interface ShelfItem {
