@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { Run } from "@/types";
 
@@ -15,9 +15,14 @@ interface Node {
   run: Run;
 }
 
-/* ── Layout: position nodes geographically or on a gentle arc ── */
+interface Edge {
+  from: number;
+  to: number;
+}
+
+/* ── Layout: spread nodes organically across the canvas ── */
 function layoutNodes(runs: Run[], w: number, h: number): Node[] {
-  const pad = 80;
+  const pad = 60;
   const uw = w - pad * 2;
   const uh = h - pad * 2;
 
@@ -41,25 +46,27 @@ function layoutNodes(runs: Run[], w: number, h: number): Node[] {
       run: r,
     }));
   } else {
-    // No coordinates — gentle wave layout
+    // Scattered layout using golden-angle spacing
+    const angleStep = Math.PI * (3 - Math.sqrt(5)); // golden angle
     nodes = runs.map((r, i) => {
-      const t = runs.length > 1 ? i / (runs.length - 1) : 0.5;
+      const radius = Math.sqrt(i / runs.length) * Math.min(uw, uh) * 0.45;
+      const angle = i * angleStep;
       return {
-        x: pad + t * uw,
-        y: pad + uh * 0.5 + Math.sin(t * Math.PI * 1.5) * uh * 0.3,
+        x: w / 2 + Math.cos(angle) * radius,
+        y: h / 2 + Math.sin(angle) * radius,
         run: r,
       };
     });
   }
 
   // Push apart overlapping nodes
-  for (let iter = 0; iter < 15; iter++) {
+  for (let iter = 0; iter < 20; iter++) {
     for (let i = 0; i < nodes.length; i++) {
       for (let j = i + 1; j < nodes.length; j++) {
         const dx = nodes[j].x - nodes[i].x;
         const dy = nodes[j].y - nodes[i].y;
         const d = Math.sqrt(dx * dx + dy * dy);
-        const minD = 100;
+        const minD = 90;
         if (d < minD && d > 0) {
           const angle = Math.atan2(dy, dx);
           const push = (minD - d) / 2;
@@ -81,156 +88,161 @@ function layoutNodes(runs: Run[], w: number, h: number): Node[] {
   return nodes;
 }
 
-/* ── Slightly wobbly bezier between two points ── */
-function curvePath(x1: number, y1: number, x2: number, y2: number, i: number) {
-  const mx = (x1 + x2) / 2;
-  const my = (y1 + y2) / 2;
-  const dx = x2 - x1;
-  const dy = y2 - y1;
-  const len = Math.sqrt(dx * dx + dy * dy) || 1;
-  const nx = -dy / len;
-  const ny = dx / len;
-  const wobble = ((i % 5) - 2) * 12;
-  return `M ${x1} ${y1} Q ${mx + nx * wobble} ${my + ny * wobble} ${x2} ${y2}`;
+/* ── Build edges: sequential + proximity-based cross-links ── */
+function buildEdges(nodes: Node[]): Edge[] {
+  const edges: Edge[] = [];
+  const edgeSet = new Set<string>();
+
+  const addEdge = (from: number, to: number) => {
+    const key = `${Math.min(from, to)}-${Math.max(from, to)}`;
+    if (!edgeSet.has(key)) {
+      edgeSet.add(key);
+      edges.push({ from, to });
+    }
+  };
+
+  // Sequential connections
+  for (let i = 1; i < nodes.length; i++) {
+    addEdge(i - 1, i);
+  }
+
+  // Proximity-based cross-links for network effect
+  for (let i = 0; i < nodes.length; i++) {
+    const dists: { j: number; d: number }[] = [];
+    for (let j = 0; j < nodes.length; j++) {
+      if (i === j) continue;
+      const dx = nodes[j].x - nodes[i].x;
+      const dy = nodes[j].y - nodes[i].y;
+      dists.push({ j, d: Math.sqrt(dx * dx + dy * dy) });
+    }
+    dists.sort((a, b) => a.d - b.d);
+    // Connect to 2 nearest neighbors beyond sequential
+    const limit = Math.min(2, dists.length);
+    for (let k = 0; k < limit; k++) {
+      addEdge(i, dists[k].j);
+    }
+  }
+
+  return edges;
 }
 
 const W = 900;
-const H = 520;
+const H = 600;
 
 export default function RunGraph({ runs, onSelectRun }: Props) {
   const nodes = useMemo(() => layoutNodes(runs, W, H), [runs]);
+  const edges = useMemo(() => buildEdges(nodes), [nodes]);
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
 
   return (
     <div className="w-full overflow-x-auto">
       <svg
         viewBox={`0 0 ${W} ${H}`}
-        className="w-full min-w-[600px]"
-        style={{ maxHeight: "65vh" }}
+        className="w-full min-w-[500px]"
+        style={{ maxHeight: "75vh" }}
       >
         {/* Background */}
-        <rect width={W} height={H} rx={12} fill="#F5F0E8" />
+        <rect width={W} height={H} rx={16} fill="white" />
 
-        {/* Connecting lines (drawn first, behind nodes) */}
-        {nodes.map((node, i) => {
-          if (i === 0) return null;
-          const prev = nodes[i - 1];
+        {/* Connecting lines */}
+        {edges.map((edge, i) => {
+          const a = nodes[edge.from];
+          const b = nodes[edge.to];
+          const isHovered =
+            hoveredId === a.run.id || hoveredId === b.run.id;
           return (
-            <motion.path
-              key={`line-${i}`}
-              d={curvePath(prev.x, prev.y, node.x, node.y, i)}
-              fill="none"
-              stroke="#C4A882"
-              strokeWidth={2}
-              strokeLinecap="round"
-              strokeDasharray="6 4"
-              initial={{ pathLength: 0, opacity: 0 }}
-              animate={{ pathLength: 1, opacity: 0.5 }}
-              transition={{ delay: 0.3 + i * 0.15, duration: 0.6, ease: "easeOut" }}
-            />
-          );
-        })}
-
-        {/* Small dots along lines */}
-        {nodes.map((node, i) => {
-          if (i === 0) return null;
-          const prev = nodes[i - 1];
-          const mx = (prev.x + node.x) / 2;
-          const my = (prev.y + node.y) / 2;
-          return (
-            <motion.circle
-              key={`dot-${i}`}
-              cx={mx}
-              cy={my}
-              r={2}
-              fill="#C4A882"
+            <motion.line
+              key={`edge-${i}`}
+              x1={a.x}
+              y1={a.y}
+              x2={b.x}
+              y2={b.y}
+              stroke={isHovered ? "#2C2C2C" : "#D1D5DB"}
+              strokeWidth={isHovered ? 1 : 0.5}
               initial={{ opacity: 0 }}
-              animate={{ opacity: 0.4 }}
-              transition={{ delay: 0.5 + i * 0.15 }}
+              animate={{ opacity: isHovered ? 0.6 : 0.3 }}
+              transition={{ delay: 0.1 + i * 0.04, duration: 0.5 }}
             />
           );
         })}
 
         {/* Nodes */}
-        {nodes.map((node, i) => (
-          <motion.g
-            key={node.run.id}
-            style={{ cursor: "pointer" }}
-            onClick={() => onSelectRun(node.run)}
-            initial={{ opacity: 0, scale: 0.5 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{
-              delay: 0.2 + i * 0.12,
-              type: "spring",
-              stiffness: 260,
-              damping: 20,
-            }}
-            whileHover={{ scale: 1.15 }}
-          >
-            {/* Photo circle */}
-            <defs>
-              <clipPath id={`photo-clip-${i}`}>
-                <circle cx={node.x} cy={node.y} r={32} />
-              </clipPath>
-            </defs>
-
-            {/* Shadow */}
-            <circle
-              cx={node.x + 2}
-              cy={node.y + 3}
-              r={34}
-              fill="rgba(0,0,0,0.08)"
-            />
-
-            {/* White border */}
-            <circle cx={node.x} cy={node.y} r={35} fill="white" />
-
-            {/* Photo */}
-            <image
-              href={node.run.photoUrl}
-              x={node.x - 32}
-              y={node.y - 32}
-              width={64}
-              height={64}
-              clipPath={`url(#photo-clip-${i})`}
-              preserveAspectRatio="xMidYMid slice"
-            />
-
-            {/* Number badge */}
-            <circle
-              cx={node.x + 24}
-              cy={node.y - 24}
-              r={10}
-              fill="white"
-              stroke="#C4A882"
-              strokeWidth={1}
-            />
-            <text
-              x={node.x + 24}
-              y={node.y - 20}
-              textAnchor="middle"
-              fontSize={10}
-              fontFamily="Karla, sans-serif"
-              fontWeight={600}
-              fill="#2C2C2C"
+        {nodes.map((node, i) => {
+          const isHovered = hoveredId === node.run.id;
+          const r = 22;
+          return (
+            <motion.g
+              key={node.run.id}
+              style={{ cursor: "pointer" }}
+              onClick={() => onSelectRun(node.run)}
+              onMouseEnter={() => setHoveredId(node.run.id)}
+              onMouseLeave={() => setHoveredId(null)}
+              initial={{ opacity: 0, scale: 0.3 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{
+                delay: 0.15 + i * 0.08,
+                type: "spring",
+                stiffness: 300,
+                damping: 22,
+              }}
+              whileHover={{ scale: 1.2 }}
             >
-              {i + 1}
-            </text>
+              {/* Photo circle */}
+              <defs>
+                <clipPath id={`clip-${i}`}>
+                  <circle cx={node.x} cy={node.y} r={r} />
+                </clipPath>
+              </defs>
 
-            {/* City label */}
-            <text
-              x={node.x}
-              y={node.y + 50}
-              textAnchor="middle"
-              fontSize={11}
-              fontFamily="Crimson Pro, serif"
-              fontStyle="italic"
-              fill="#2C2C2C"
-              opacity={0.7}
-            >
-              {node.run.location.split(",")[0]}
-            </text>
-          </motion.g>
-        ))}
+              {/* Subtle shadow */}
+              <circle
+                cx={node.x + 1}
+                cy={node.y + 2}
+                r={r + 1}
+                fill="rgba(0,0,0,0.06)"
+              />
+
+              {/* Thin border */}
+              <circle
+                cx={node.x}
+                cy={node.y}
+                r={r + 1}
+                fill="white"
+                stroke={isHovered ? "#2C2C2C" : "#E5E7EB"}
+                strokeWidth={isHovered ? 1.5 : 0.5}
+              />
+
+              {/* Photo */}
+              <image
+                href={node.run.photoUrl}
+                x={node.x - r}
+                y={node.y - r}
+                width={r * 2}
+                height={r * 2}
+                clipPath={`url(#clip-${i})`}
+                preserveAspectRatio="xMidYMid slice"
+              />
+
+              {/* City label — only on hover */}
+              {isHovered && (
+                <motion.text
+                  x={node.x}
+                  y={node.y + r + 16}
+                  textAnchor="middle"
+                  fontSize={11}
+                  fontFamily="Karla, sans-serif"
+                  fontWeight={500}
+                  fill="#2C2C2C"
+                  initial={{ opacity: 0, y: node.y + r + 10 }}
+                  animate={{ opacity: 1, y: node.y + r + 16 }}
+                  transition={{ duration: 0.15 }}
+                >
+                  {node.run.location.split(",")[0]}
+                </motion.text>
+              )}
+            </motion.g>
+          );
+        })}
       </svg>
     </div>
   );

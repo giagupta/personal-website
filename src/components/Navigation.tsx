@@ -5,10 +5,8 @@ import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 
 const links = [
-  { href: "/", label: "Home" },
   { href: "/runs", label: "Runs" },
   { href: "/shelf", label: "Shelf" },
-  { href: "/about", label: "About" },
 ];
 
 export default function Navigation() {

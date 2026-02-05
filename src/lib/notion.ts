@@ -1,5 +1,5 @@
 import { Client } from "@notionhq/client";
-import type { Run, ShelfItem } from "@/types";
+import type { Run, RunLink, ShelfItem } from "@/types";
 
 // ── Notion client (null when env vars not set) ──────────────
 const notion = process.env.NOTION_API_KEY
@@ -45,19 +45,31 @@ export async function getRuns(): Promise<Run[]> {
         database_id: process.env.NOTION_RUNS_DB,
         sorts: [{ property: "Date", direction: "ascending" }],
       });
-      return resp.results.map((page: any) => ({
-        id: page.id,
-        location: text(page, "Location"),
-        date: date(page, "Date"),
-        photoUrl: text(page, "Photo"),
-        thoughts: text(page, "Thoughts"),
-        distance: text(page, "Distance"),
-        color: text(page, "Color") || "#7BA7BC",
-        coordinates:
-          num(page, "Lat") && num(page, "Lng")
-            ? [[num(page, "Lat"), num(page, "Lng")]]
-            : undefined,
-      }));
+      return resp.results.map((page: any) => {
+        let links: RunLink[] | undefined;
+        const linksRaw = text(page, "Links");
+        if (linksRaw) {
+          try {
+            links = JSON.parse(linksRaw);
+          } catch {
+            links = undefined;
+          }
+        }
+        return {
+          id: page.id,
+          location: text(page, "Location"),
+          date: date(page, "Date"),
+          photoUrl: text(page, "Photo"),
+          thoughts: text(page, "Thoughts"),
+          distance: text(page, "Distance"),
+          color: text(page, "Color") || "#7BA7BC",
+          coordinates:
+            num(page, "Lat") && num(page, "Lng")
+              ? [[num(page, "Lat"), num(page, "Lng")]]
+              : undefined,
+          links,
+        };
+      });
     } catch (e) {
       console.error("Notion runs fetch failed, using fallback:", e);
     }
