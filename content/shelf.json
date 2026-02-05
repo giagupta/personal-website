@@ -1,0 +1,122 @@
+[
+  {
+    "id": "apple",
+    "emoji": "🍎",
+    "name": "Apple",
+    "concept": "Gravity",
+    "description": "Newton's falling apple reminds us that the most profound discoveries come from observing the everyday.",
+    "position": { "x": 5, "y": 4 },
+    "size": "lg",
+    "rotation": -3
+  },
+  {
+    "id": "compass",
+    "emoji": "🧭",
+    "name": "Compass",
+    "concept": "Navigation",
+    "description": "Before GPS, before maps, there was a magnetized needle pointing north.",
+    "position": { "x": 28, "y": 8 },
+    "size": "md",
+    "rotation": 5
+  },
+  {
+    "id": "lightbulb",
+    "emoji": "💡",
+    "name": "Lightbulb",
+    "concept": "Innovation",
+    "description": "Edison's 10,000 experiments weren't failures — they were steps.",
+    "position": { "x": 52, "y": 2 },
+    "size": "lg",
+    "rotation": -2
+  },
+  {
+    "id": "hourglass",
+    "emoji": "⏳",
+    "name": "Hourglass",
+    "concept": "Time",
+    "description": "Sand flows one grain at a time, never rushing, never pausing.",
+    "position": { "x": 78, "y": 6 },
+    "size": "md",
+    "rotation": 8
+  },
+  {
+    "id": "telescope",
+    "emoji": "🔭",
+    "name": "Telescope",
+    "concept": "Perspective",
+    "description": "Galileo pointed his telescope at the sky and changed our place in the universe forever.",
+    "position": { "x": 12, "y": 28 },
+    "size": "md",
+    "rotation": -6
+  },
+  {
+    "id": "book",
+    "emoji": "📖",
+    "name": "Open Book",
+    "concept": "Knowledge",
+    "description": "Every book is a conversation across time.",
+    "position": { "x": 40, "y": 25 },
+    "size": "lg",
+    "rotation": 3
+  },
+  {
+    "id": "seed",
+    "emoji": "🌱",
+    "name": "Seedling",
+    "concept": "Growth",
+    "description": "A tiny seed holds an entire forest within it.",
+    "position": { "x": 68, "y": 30 },
+    "size": "sm",
+    "rotation": -4
+  },
+  {
+    "id": "puzzle",
+    "emoji": "🧩",
+    "name": "Puzzle Piece",
+    "concept": "Connection",
+    "description": "A single puzzle piece is meaningless alone. But placed in context, it becomes essential.",
+    "position": { "x": 88, "y": 28 },
+    "size": "md",
+    "rotation": 12
+  },
+  {
+    "id": "wave",
+    "emoji": "🌊",
+    "name": "Wave",
+    "concept": "Resilience",
+    "description": "The ocean never stops. Waves crash, recede, and return — endlessly.",
+    "position": { "x": 5, "y": 55 },
+    "size": "lg",
+    "rotation": 2
+  },
+  {
+    "id": "key",
+    "emoji": "🗝️",
+    "name": "Vintage Key",
+    "concept": "Curiosity",
+    "description": "Every locked door is an invitation.",
+    "position": { "x": 32, "y": 52 },
+    "size": "md",
+    "rotation": -10
+  },
+  {
+    "id": "feather",
+    "emoji": "🪶",
+    "name": "Feather",
+    "concept": "Lightness",
+    "description": "A feather is engineering perfection — strong enough for flight, light enough to float.",
+    "position": { "x": 60, "y": 58 },
+    "size": "sm",
+    "rotation": -15
+  },
+  {
+    "id": "camera",
+    "emoji": "📷",
+    "name": "Camera",
+    "concept": "Memory",
+    "description": "A camera freezes a moment that would otherwise dissolve.",
+    "position": { "x": 82, "y": 55 },
+    "size": "md",
+    "rotation": 6
+  }
+]

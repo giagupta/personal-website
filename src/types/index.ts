@@ -2,7 +2,8 @@ export interface Run {
   id: string;
   location: string;
   date: string;
-  coordinates: [number, number][];
+  /** Optional GPS coords for geographic node positioning. */
+  coordinates?: [number, number][];
   photoUrl: string;
   thoughts: string;
   distance: string;

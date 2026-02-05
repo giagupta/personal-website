@@ -41,6 +41,8 @@ export default function RunMap({ runs, onSelectRun }: RunMapProps) {
       const tilts = [-4, 3, -2, 5, -6, 2, -3, 4, -5, 1];
 
       runs.forEach((run, i) => {
+        if (!run.coordinates?.length) return;
+
         // Route polyline
         L.polyline(run.coordinates, {
           color: run.color,
@@ -69,7 +71,7 @@ export default function RunMap({ runs, onSelectRun }: RunMapProps) {
       });
 
       // Fit to routes
-      const pts = runs.flatMap((r) => r.coordinates);
+      const pts = runs.flatMap((r) => r.coordinates ?? []);
       if (pts.length) {
         map.fitBounds(L.latLngBounds(pts), {
           padding: [60, 60],

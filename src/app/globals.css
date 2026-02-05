@@ -82,58 +82,8 @@
   background: #a89f91;
 }
 
-/* ─── Leaflet overrides ─── */
+/* ─── Leaflet (kept for optional map usage) ─── */
 .leaflet-container {
   font-family: "Karla", sans-serif !important;
   border-radius: 8px;
-}
-
-/* Warm vintage tint on map tiles */
-.run-map-container .leaflet-tile-pane {
-  filter: sepia(0.2) saturate(0.82) brightness(1.06) hue-rotate(-10deg);
-}
-
-/* ─── Scrapbook photo markers pinned on the map ─── */
-.run-photo-pin {
-  background: none !important;
-  border: none !important;
-}
-
-.run-photo-frame {
-  width: 96px;
-  background: white;
-  padding: 5px 5px 22px 5px;
-  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.18), 0 1px 4px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.25s ease;
-  position: relative;
-}
-
-.run-photo-frame img {
-  width: 100%;
-  height: 68px;
-  object-fit: cover;
-  display: block;
-}
-
-.run-photo-city {
-  position: absolute;
-  bottom: 4px;
-  left: 0;
-  right: 0;
-  text-align: center;
-  font-family: "Crimson Pro", serif;
-  font-size: 11px;
-  font-style: italic;
-  color: #3a3a3a;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  padding: 0 4px;
-}
-
-.run-photo-frame:hover {
-  transform: rotate(0deg) scale(1.15) !important;
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.22), 0 2px 6px rgba(0, 0, 0, 0.12);
-  z-index: 1000 !important;
 }
