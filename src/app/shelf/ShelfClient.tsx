@@ -12,32 +12,26 @@ export default function ShelfClient({ items }: { items: ShelfItem[] }) {
 
   return (
     <PageTransition>
-      <div className="max-w-7xl mx-auto px-6 py-10">
+      <div className="max-w-5xl mx-auto px-4 md:px-6 py-10">
         {/* Header */}
         <motion.div
-          className="mb-4"
-          initial={{ opacity: 0, y: 12 }}
+          className="mb-6"
+          initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.4 }}
         >
-          <h1 className="font-serif text-4xl md:text-5xl font-light italic text-charcoal">
-            Gia&apos;s Shelf
+          <h1 className="text-3xl md:text-4xl font-light text-charcoal">
+            Shelf
           </h1>
-          <p className="mt-2 text-sm text-charcoal/40 max-w-md">
-            A collection of objects and the ideas they carry.{" "}
-            <span className="inline-flex items-center gap-1">
-              <span className="border border-charcoal/30 rounded-sm px-1.5 py-0 text-[11px] text-charcoal/50">
-                Click
-              </span>{" "}
-              on any object to learn more.
-            </span>
+          <p className="mt-1.5 text-xs text-charcoal/30">
+            {items.length} objects &middot; click to explore
           </p>
         </motion.div>
 
         {/* Freeform canvas — desktop */}
         <div
           className="hidden md:block relative w-full"
-          style={{ height: "75vh", minHeight: 600 }}
+          style={{ height: "70vh", minHeight: 500 }}
         >
           {items.map((item, i) => (
             <ShelfCard
@@ -49,54 +43,31 @@ export default function ShelfClient({ items }: { items: ShelfItem[] }) {
           ))}
         </div>
 
-        {/* Mobile fallback */}
-        <div className="md:hidden flex flex-wrap justify-center gap-6 py-6">
+        {/* Mobile — grid */}
+        <div className="md:hidden grid grid-cols-3 gap-4 py-4">
           {items.map((item, i) => (
             <motion.button
               key={item.id}
               onClick={() => setSelectedItem(item)}
-              className="relative flex flex-col items-center"
-              initial={{ opacity: 0, y: 12 }}
+              className="flex flex-col items-center gap-1.5 py-3"
+              initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.05, duration: 0.4 }}
+              transition={{ delay: i * 0.04, duration: 0.3 }}
               whileTap={{ scale: 0.92 }}
-              style={{ transform: `rotate(${item.rotation ?? 0}deg)` }}
             >
-              <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full border border-charcoal/30 bg-cream text-[9px] flex items-center justify-center text-charcoal/50 z-10">
-                {i + 1}
-              </span>
-              <span
-                className={
-                  item.size === "lg"
-                    ? "text-6xl"
-                    : item.size === "md"
-                    ? "text-5xl"
-                    : "text-4xl"
-                }
-              >
-                {item.emoji}
-              </span>
-              <span className="mt-1 text-[10px] font-serif italic text-charcoal/50">
-                {item.name}
-              </span>
+              {item.imageUrl ? (
+                <img
+                  src={item.imageUrl}
+                  alt={item.name}
+                  className="w-14 h-14 object-contain drop-shadow-sm"
+                />
+              ) : (
+                <span className="text-4xl">{item.emoji}</span>
+              )}
+              <span className="text-[10px] text-charcoal/40">{item.name}</span>
             </motion.button>
           ))}
         </div>
-
-        {/* Bottom label */}
-        <motion.div
-          className="hidden md:flex items-end justify-between mt-2"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2, duration: 0.6 }}
-        >
-          <p className="text-[11px] text-charcoal/30 tracking-wide">
-            {items.length} objects
-          </p>
-          <p className="text-[11px] text-charcoal/30 font-serif italic">
-            Explore
-          </p>
-        </motion.div>
       </div>
 
       <ShelfModal item={selectedItem} onClose={() => setSelectedItem(null)} />

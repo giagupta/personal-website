@@ -15,7 +15,7 @@ export default function Navigation() {
   return (
     <nav className="fixed top-0 left-0 right-0 z-40 bg-cream/90 backdrop-blur-sm border-b border-tan/30">
       <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-        <Link href="/" className="font-serif text-xl font-semibold text-charcoal tracking-wide">
+        <Link href="/" className="text-xl font-semibold text-charcoal tracking-wide">
           Gia
         </Link>
         <div className="flex items-center gap-8">
