@@ -1,0 +1,23 @@
+[
+  {
+    "id": "001",
+    "title": "On running in new cities",
+    "date": "January 15, 2025",
+    "body": "There's a particular kind of knowledge you get from running through a city you've never been to. It's not the knowledge of a tourist — you don't see monuments or take photos. You see the cracks in the sidewalk, the dogs being walked, the bakeries opening at 6am. You learn the city the way a local knows it: through your feet.",
+    "tag": "running"
+  },
+  {
+    "id": "002",
+    "title": "Things I keep on my shelf",
+    "date": "February 3, 2025",
+    "body": "I started collecting objects that remind me of ideas. A compass for when I feel lost. An hourglass for when I'm impatient. A key for when I need to unlock something in myself. They sit on my shelf and they remind me, quietly, of the things I already know but keep forgetting.",
+    "tag": "reflection"
+  },
+  {
+    "id": "003",
+    "title": "Morning routines are overrated",
+    "date": "March 12, 2025",
+    "body": "Every productivity blog wants you to wake up at 5am, meditate, journal, exercise, and eat a perfect breakfast. I just want to drink my coffee slowly and look out the window. Sometimes the most productive thing you can do is nothing at all.",
+    "tag": "life"
+  }
+]

@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 const links = [
   { href: "/runs", label: "Runs" },
   { href: "/shelf", label: "Shelf" },
+  { href: "/blog", label: "Writing" },
 ];
 
 export default function Navigation() {
