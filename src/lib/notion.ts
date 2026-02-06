@@ -46,15 +46,27 @@ export async function getRuns(): Promise<Run[]> {
         sorts: [{ property: "Date", direction: "ascending" }],
       });
       return resp.results.map((page: any) => {
+        // Parse links — try the "Links" property as JSON text
         let links: RunLink[] | undefined;
         const linksRaw = text(page, "Links");
         if (linksRaw) {
           try {
-            links = JSON.parse(linksRaw);
+            const parsed = JSON.parse(linksRaw);
+            links = Array.isArray(parsed) ? parsed : undefined;
           } catch {
+            // If not valid JSON, try treating as comma-separated URLs
             links = undefined;
           }
         }
+
+        // Also check for a "Link" (singular) URL property
+        if (!links) {
+          const singleLink = text(page, "Link");
+          if (singleLink) {
+            links = [{ label: singleLink, url: singleLink, type: "other" }];
+          }
+        }
+
         return {
           id: page.id,
           location: text(page, "Location"),

@@ -86,7 +86,7 @@ export default function PostcardModal({ run, onClose }: PostcardModalProps) {
 
               {/* Location overlay */}
               <div className="absolute bottom-4 left-5">
-                <h2 className="font-serif text-xl md:text-2xl font-medium text-white">
+                <h2 className="font-sans text-xl md:text-2xl font-medium text-white">
                   {run.location}
                 </h2>
                 <p className="text-xs text-white/70 mt-0.5">
@@ -98,7 +98,7 @@ export default function PostcardModal({ run, onClose }: PostcardModalProps) {
             {/* Content */}
             <div className="p-5 md:p-6">
               {/* Thoughts */}
-              <p className="font-serif text-base italic text-charcoal/80 leading-relaxed">
+              <p className="font-sans text-base italic text-charcoal/80 leading-relaxed">
                 &ldquo;{run.thoughts}&rdquo;
               </p>
 
