@@ -1,14 +1,46 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import PageTransition from "@/components/PageTransition";
 import ShelfCard from "@/components/shelf/ShelfCard";
 import ShelfModal from "@/components/shelf/ShelfModal";
 import { ShelfItem } from "@/types";
 
+/* Auto-distribute items if positions are all clustered at 0,0 */
+function autoLayout(items: ShelfItem[]): ShelfItem[] {
+  const allDefault = items.every(
+    (item) => item.position.x <= 1 && item.position.y <= 1
+  );
+
+  if (!allDefault) return items;
+
+  // Scatter items across the canvas using a grid-ish pattern with jitter
+  const cols = Math.ceil(Math.sqrt(items.length * 1.5));
+  const rows = Math.ceil(items.length / cols);
+  const cellW = 80 / cols; // percentage of canvas width
+  const cellH = 75 / rows; // percentage of canvas height
+
+  return items.map((item, i) => {
+    const col = i % cols;
+    const row = Math.floor(i / cols);
+    // Center in cell with some randomish offset based on index
+    const jitterX = ((i * 7 + 3) % 11 - 5) * 1.5;
+    const jitterY = ((i * 13 + 5) % 11 - 5) * 1.5;
+    return {
+      ...item,
+      position: {
+        x: 8 + col * cellW + cellW / 2 + jitterX,
+        y: 5 + row * cellH + cellH / 2 + jitterY,
+      },
+      rotation: item.rotation || ((i * 17) % 13 - 6),
+    };
+  });
+}
+
 export default function ShelfClient({ items }: { items: ShelfItem[] }) {
   const [selectedItem, setSelectedItem] = useState<ShelfItem | null>(null);
+  const layoutItems = useMemo(() => autoLayout(items), [items]);
 
   return (
     <PageTransition>
@@ -33,7 +65,7 @@ export default function ShelfClient({ items }: { items: ShelfItem[] }) {
           className="hidden md:block relative w-full"
           style={{ height: "70vh", minHeight: 500 }}
         >
-          {items.map((item, i) => (
+          {layoutItems.map((item, i) => (
             <ShelfCard
               key={item.id}
               item={item}
