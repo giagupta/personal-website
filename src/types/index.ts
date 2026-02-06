@@ -1,3 +1,11 @@
+export interface BlogPost {
+  id: string;
+  title: string;
+  date: string;
+  body: string;
+  tag?: string;
+}
+
 export interface RunLink {
   label: string;
   url: string;

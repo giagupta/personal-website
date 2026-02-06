@@ -1,5 +1,5 @@
 import { Client } from "@notionhq/client";
-import type { Run, RunLink, ShelfItem } from "@/types";
+import type { BlogPost, Run, RunLink, ShelfItem } from "@/types";
 
 // ── Notion client (null when env vars not set) ──────────────
 const notion = process.env.NOTION_API_KEY
@@ -117,4 +117,28 @@ export async function getShelfItems(): Promise<ShelfItem[]> {
 
   const data = (await import("../../content/shelf.json")).default;
   return data as ShelfItem[];
+}
+
+// ── Fetch blog posts ────────────────────────────────────────
+export async function getBlogPosts(): Promise<BlogPost[]> {
+  if (notion && process.env.NOTION_BLOG_DB) {
+    try {
+      const resp = await notion.databases.query({
+        database_id: process.env.NOTION_BLOG_DB,
+        sorts: [{ property: "Date", direction: "descending" }],
+      });
+      return resp.results.map((page: any) => ({
+        id: page.id,
+        title: text(page, "Title") || text(page, "Name"),
+        date: date(page, "Date"),
+        body: text(page, "Body") || text(page, "Content"),
+        tag: sel(page, "Tag") || text(page, "Tag") || undefined,
+      }));
+    } catch (e) {
+      console.error("Notion blog fetch failed, using fallback:", e);
+    }
+  }
+
+  const data = (await import("../../content/blog.json")).default;
+  return data as BlogPost[];
 }
