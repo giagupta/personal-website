@@ -20,7 +20,7 @@ export default function RunsClient({ runs }: { runs: Run[] }) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
         >
-          <h1 className="font-sans text-3xl md:text-4xl font-light text-charcoal">
+          <h1 className="font-serif text-3xl md:text-4xl font-light text-charcoal">
             Wanders
           </h1>
           <p className="mt-1.5 text-xs text-charcoal/30">
