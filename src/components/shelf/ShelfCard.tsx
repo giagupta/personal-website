@@ -22,7 +22,7 @@ export default function ShelfCard({ item, index, onClick }: ShelfCardProps) {
   return (
     <motion.button
       onClick={onClick}
-      className="group absolute cursor-pointer select-none"
+      className="group absolute cursor-pointer select-none -translate-x-1/2 -translate-y-1/2"
       style={{
         left: `${item.position.x}%`,
         top: `${item.position.y}%`,

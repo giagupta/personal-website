@@ -89,49 +89,18 @@ export default function ShelfClient({ items }: { items: ShelfItem[] }) {
           </p>
         </motion.div>
 
-        {/* Freeform canvas — desktop */}
-        <div
-          className="hidden md:block relative w-full"
-          style={{ height: "70vh", minHeight: 500 }}
-        >
-          {layoutItems.map((item, i) => (
-            <ShelfCard
-              key={item.id}
-              item={item}
-              index={i}
-              onClick={() => setSelectedItem(item)}
-            />
-          ))}
-        </div>
-
-        {/* Mobile — grid with white card frames */}
-        <div className="md:hidden grid grid-cols-3 gap-4 py-4">
-          {items.map((item, i) => (
-            <motion.button
-              key={item.id}
-              onClick={() => setSelectedItem(item)}
-              className="flex flex-col items-center gap-1.5"
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.04, duration: 0.3 }}
-              whileTap={{ scale: 0.92 }}
-            >
-              <div className="bg-white rounded-sm shadow-md p-1 w-20 h-20">
-                {item.imageUrl ? (
-                  <img
-                    src={item.imageUrl}
-                    alt={item.name}
-                    className="w-full h-full object-cover rounded-[1px]"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-gray-50 rounded-[1px]">
-                    <span className="text-3xl">{item.emoji}</span>
-                  </div>
-                )}
-              </div>
-              <span className="text-[10px] text-charcoal/40">{item.name}</span>
-            </motion.button>
-          ))}
+        {/* Freeform scattered canvas — same layout on all screens */}
+        <div className="relative w-full overflow-hidden" style={{ height: "70vh", minHeight: 420 }}>
+          <div className="absolute inset-0 origin-top-left scale-[0.7] sm:scale-[0.85] md:scale-100 w-[143%] h-[143%] sm:w-[118%] sm:h-[118%] md:w-full md:h-full">
+            {layoutItems.map((item, i) => (
+              <ShelfCard
+                key={item.id}
+                item={item}
+                index={i}
+                onClick={() => setSelectedItem(item)}
+              />
+            ))}
+          </div>
         </div>
       </div>
 
