@@ -25,17 +25,21 @@ export default function AboutClient() {
           transition={{ delay: 0.1, duration: 0.5 }}
         >
           <p>
-            I&rsquo;m a student, runner, and curious person interested in design,
-            technology, and the spaces between them. I like thinking about how
-            things work and why they feel the way they do.
+            I&rsquo;m interested in understanding intelligence as a tool for
+            solving problems and coming up with good new ideas. Aligned AI, 
+            robotics, & neurotech seem like promising ways to help humanity
+            make progress. I'm deeply passionate about pursuing poetic and
+            scientific truths. Whatever I do, I hope to do it with love,
+            humility, curiosity & a boundless sense of wonder at the miracles
+            and beauty of the universe.
           </p>
 
           <p>Outside of that I&rsquo;m:</p>
           <ul className="list-disc list-inside space-y-1 text-charcoal/60">
-            <li>Going on long wanders and thinking too much</li>
-            <li>Reading whatever catches my eye</li>
-            <li>Collecting things for my shelf</li>
-            <li>Writing about things I find interesting</li>
+            <li>Host an art pop-up concept called In The Margins</li>
+            <li>Facilitate an artist collective @ Penn, Cirlce</li>
+            <li>Read poetry & try to find it in the world</li>
+            <li>Spend time with people I love, ideally in the sun</li>
           </ul>
         </motion.div>
 
