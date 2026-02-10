@@ -1,82 +1,21 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import PageTransition from "@/components/PageTransition";
 import ShelfCard from "@/components/shelf/ShelfCard";
 import ShelfModal from "@/components/shelf/ShelfModal";
 import { ShelfItem } from "@/types";
 
-/* Seeded pseudo-random for deterministic scatter */
-function seededRand(seed: number) {
-  let s = seed;
-  return () => {
-    s = (s * 16807 + 0) % 2147483647;
-    return (s - 1) / 2147483646;
-  };
-}
-
-/* Auto-distribute items with an organic scattered "tossed on desk" feel */
-function autoLayout(items: ShelfItem[]): ShelfItem[] {
-  const allDefault = items.every(
-    (item) => item.position.x <= 1 && item.position.y <= 1
-  );
-
-  if (!allDefault) return items;
-
-  const rand = seededRand(42);
-  const placed: { x: number; y: number }[] = [];
-
-  return items.map((item, i) => {
-    // Try to place with some overlap allowed but not total stacking
-    let bestX = 10 + rand() * 72;
-    let bestY = 5 + rand() * 70;
-
-    // Attempt a few placements, pick the one with best spacing
-    for (let attempt = 0; attempt < 12; attempt++) {
-      const cx = 6 + rand() * 78;
-      const cy = 4 + rand() * 74;
-      let minDist = Infinity;
-      for (const p of placed) {
-        const d = Math.sqrt((cx - p.x) ** 2 + (cy - p.y) ** 2);
-        if (d < minDist) minDist = d;
-      }
-      // Accept if spaced at least 12% apart (allows light overlap)
-      if (placed.length === 0 || minDist > 12) {
-        bestX = cx;
-        bestY = cy;
-        break;
-      }
-      // Otherwise keep the best spaced attempt
-      if (minDist > 8) {
-        bestX = cx;
-        bestY = cy;
-      }
-    }
-
-    placed.push({ x: bestX, y: bestY });
-
-    // Organic rotations: -12 to +12 degrees
-    const rotation = item.rotation ?? Math.round((rand() - 0.5) * 24);
-
-    return {
-      ...item,
-      position: { x: bestX, y: bestY },
-      rotation,
-    };
-  });
-}
-
 export default function ShelfClient({ items }: { items: ShelfItem[] }) {
   const [selectedItem, setSelectedItem] = useState<ShelfItem | null>(null);
-  const layoutItems = useMemo(() => autoLayout(items), [items]);
 
   return (
     <PageTransition>
-      <div className="max-w-5xl mx-auto px-4 md:px-6 py-10">
+      <div className="max-w-4xl mx-auto px-4 md:px-6 py-10">
         {/* Header */}
         <motion.div
-          className="mb-6"
+          className="mb-8"
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
@@ -85,22 +24,20 @@ export default function ShelfClient({ items }: { items: ShelfItem[] }) {
             Shelf
           </h1>
           <p className="mt-1.5 text-xs text-charcoal/30">
-            {items.length} objects &middot; click to explore
+            {items.length} objects
           </p>
         </motion.div>
 
-        {/* Freeform scattered canvas — same layout on all screens */}
-        <div className="relative w-full overflow-hidden" style={{ height: "70vh", minHeight: 420 }}>
-          <div className="absolute inset-0 origin-top-left scale-[0.7] sm:scale-[0.85] md:scale-100 w-[143%] h-[143%] sm:w-[118%] sm:h-[118%] md:w-full md:h-full">
-            {layoutItems.map((item, i) => (
-              <ShelfCard
-                key={item.id}
-                item={item}
-                index={i}
-                onClick={() => setSelectedItem(item)}
-              />
-            ))}
-          </div>
+        {/* Finder-style icon grid */}
+        <div className="flex flex-wrap gap-6 md:gap-8 justify-start">
+          {items.map((item, i) => (
+            <ShelfCard
+              key={item.id}
+              item={item}
+              index={i}
+              onClick={() => setSelectedItem(item)}
+            />
+          ))}
         </div>
       </div>
 
