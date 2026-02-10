@@ -8,6 +8,14 @@ import { BlogPost } from "@/types";
 export default function BlogClient({ posts }: { posts: BlogPost[] }) {
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
 
+  const handleClick = (post: BlogPost) => {
+    if (post.url) {
+      window.open(post.url, "_blank", "noopener,noreferrer");
+    } else {
+      setSelectedPost(post);
+    }
+  };
+
   return (
     <PageTransition>
       <div className="max-w-3xl mx-auto px-4 md:px-6 py-10">
@@ -28,7 +36,7 @@ export default function BlogClient({ posts }: { posts: BlogPost[] }) {
           {posts.map((post, i) => (
             <motion.button
               key={post.id}
-              onClick={() => setSelectedPost(post)}
+              onClick={() => handleClick(post)}
               className="w-full text-left group"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -41,6 +49,13 @@ export default function BlogClient({ posts }: { posts: BlogPost[] }) {
                 <span className="text-sm uppercase tracking-wide text-charcoal/60 group-hover:text-charcoal transition-colors truncate">
                   {post.title}
                 </span>
+                {post.url && (
+                  <svg className="w-3 h-3 text-charcoal/20 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                    <polyline points="15 3 21 3 21 9" />
+                    <line x1="10" y1="14" x2="21" y2="3" />
+                  </svg>
+                )}
                 {post.tag && (
                   <span className="hidden md:inline text-[10px] text-charcoal/20 uppercase tracking-widest ml-auto flex-shrink-0">
                     {post.tag}
@@ -52,7 +67,7 @@ export default function BlogClient({ posts }: { posts: BlogPost[] }) {
         </div>
       </div>
 
-      {/* Post detail */}
+      {/* Post detail modal — only for posts with body, no url */}
       <AnimatePresence>
         {selectedPost && (
           <motion.div
@@ -86,9 +101,11 @@ export default function BlogClient({ posts }: { posts: BlogPost[] }) {
                   {selectedPost.title}
                 </h2>
                 <div className="mt-1 w-8 h-[1px] bg-charcoal/10" />
-                <p className="mt-5 text-sm text-charcoal/65 leading-relaxed whitespace-pre-line">
-                  {selectedPost.body}
-                </p>
+                {selectedPost.body && (
+                  <p className="mt-5 text-sm text-charcoal/65 leading-relaxed whitespace-pre-line">
+                    {selectedPost.body}
+                  </p>
+                )}
               </div>
 
               <button

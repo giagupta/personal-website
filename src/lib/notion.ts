@@ -125,15 +125,57 @@ export async function getBlogPosts(): Promise<BlogPost[]> {
     try {
       const resp = await notion.databases.query({
         database_id: process.env.NOTION_BLOG_DB,
-        sorts: [{ property: "Date", direction: "descending" }],
       });
-      return resp.results.map((page: any) => ({
-        id: page.id,
-        title: text(page, "Title") || text(page, "Name"),
-        date: date(page, "Date"),
-        body: text(page, "Body") || text(page, "Content"),
-        tag: sel(page, "Tag") || text(page, "Tag") || undefined,
-      }));
+
+      // Sort by Date if the property exists, otherwise keep Notion order
+      const posts = resp.results.map((page: any) => {
+        const props = Object.keys(page.properties);
+        // Find title — try common names
+        const titleKey =
+          props.find((p) => p.toLowerCase() === "title") ||
+          props.find((p) => p.toLowerCase() === "name") ||
+          props.find(
+            (p) => page.properties[p].type === "title"
+          ) ||
+          "";
+        const title = titleKey ? text(page, titleKey) : "";
+
+        // Find date
+        const dateKey =
+          props.find((p) => p.toLowerCase() === "date") || "";
+
+        // Find body/content
+        const bodyKey =
+          props.find((p) => p.toLowerCase() === "body") ||
+          props.find((p) => p.toLowerCase() === "content") ||
+          "";
+
+        // Find tag
+        const tagKey =
+          props.find((p) => p.toLowerCase() === "tag") ||
+          props.find((p) => p.toLowerCase() === "tags") ||
+          "";
+
+        // Find URL/Link
+        const urlKey =
+          props.find((p) => p.toLowerCase() === "url") ||
+          props.find((p) => p.toLowerCase() === "link") ||
+          "";
+
+        return {
+          id: page.id,
+          title,
+          date: dateKey ? date(page, dateKey) : "",
+          body: bodyKey ? text(page, bodyKey) : undefined,
+          tag:
+            (tagKey
+              ? sel(page, tagKey) || text(page, tagKey)
+              : undefined) || undefined,
+          url: urlKey ? text(page, urlKey) : undefined,
+        };
+      });
+
+      return posts.filter((p) => p.title);
     } catch (e) {
       console.error("Notion blog fetch failed, using fallback:", e);
     }
