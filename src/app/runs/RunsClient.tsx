@@ -21,10 +21,10 @@ export default function RunsClient({ runs }: { runs: Run[] }) {
           transition={{ duration: 0.4 }}
         >
           <h1 className="font-sans text-3xl md:text-4xl font-light text-charcoal">
-            Runs
+            Wanders
           </h1>
           <p className="mt-1.5 text-xs text-charcoal/30">
-            {runs.length} runs &middot; click a node to read
+            {runs.length} wanders &middot; click a node to read
           </p>
         </motion.div>
 

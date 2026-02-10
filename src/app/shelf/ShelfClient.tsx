@@ -16,7 +16,7 @@ function seededRand(seed: number) {
   };
 }
 
-/* Organic scatter layout */
+/* Place items in rows with organic horizontal offsets */
 function autoLayout(items: ShelfItem[]): ShelfItem[] {
   const allDefault = items.every(
     (item) => item.position.x <= 1 && item.position.y <= 1
@@ -24,34 +24,31 @@ function autoLayout(items: ShelfItem[]): ShelfItem[] {
   if (!allDefault) return items;
 
   const rand = seededRand(42);
-  const placed: { x: number; y: number }[] = [];
-
-  return items.map((item) => {
-    let bestX = 10 + rand() * 75;
-    let bestY = 8 + rand() * 72;
-
-    for (let attempt = 0; attempt < 15; attempt++) {
-      const cx = 8 + rand() * 78;
-      const cy = 6 + rand() * 76;
-      let minDist = Infinity;
-      for (const p of placed) {
-        const d = Math.sqrt((cx - p.x) ** 2 + (cy - p.y) ** 2);
-        if (d < minDist) minDist = d;
-      }
-      if (placed.length === 0 || minDist > 14) {
-        bestX = cx;
-        bestY = cy;
-        break;
-      }
-      if (minDist > 10) {
-        bestX = cx;
-        bestY = cy;
-      }
+  // Place 2-3 items per row, staggered horizontally
+  const rows: number[][] = [];
+  let idx = 0;
+  while (idx < items.length) {
+    const perRow = rand() > 0.5 ? 3 : 2;
+    const row: number[] = [];
+    for (let j = 0; j < perRow && idx < items.length; j++, idx++) {
+      row.push(idx);
     }
+    rows.push(row);
+  }
 
-    placed.push({ x: bestX, y: bestY });
-    return { ...item, position: { x: bestX, y: bestY } };
-  });
+  const result = [...items];
+  let yPos = 8;
+  for (const row of rows) {
+    const segW = 85 / row.length;
+    for (let j = 0; j < row.length; j++) {
+      const i = row[j];
+      const cx = 8 + segW * j + segW * (0.2 + rand() * 0.6);
+      const cy = yPos + rand() * 6;
+      result[i] = { ...result[i], position: { x: cx, y: cy } };
+    }
+    yPos += 28 + rand() * 8;
+  }
+  return result;
 }
 
 /* Sidebar tag colors */
@@ -68,6 +65,9 @@ export default function ShelfClient({ items }: { items: ShelfItem[] }) {
 
   const sf = '-apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", system-ui, sans-serif';
 
+  // Compute content height based on how many rows we need
+  const contentH = Math.max(600, Math.ceil(items.length / 2.5) * 260 + 100);
+
   return (
     <PageTransition>
       <div className="flex items-start justify-center min-h-screen px-3 py-6 md:px-6 md:py-10">
@@ -79,7 +79,7 @@ export default function ShelfClient({ items }: { items: ShelfItem[] }) {
           transition={{ duration: 0.5, type: "spring", stiffness: 200, damping: 24 }}
         >
           {/* ===== Title bar ===== */}
-          <div className="h-[52px] bg-gradient-to-b from-[#E8E6E3] to-[#DDDBD8] flex items-center px-4 border-b border-black/[0.06] relative">
+          <div className="h-[52px] bg-gradient-to-b from-[#E8E6E3] to-[#DDDBD8] flex items-center px-4 border-b border-black/[0.06] sticky top-0 z-10">
             {/* Traffic lights */}
             <div className="flex items-center gap-2">
               <span className="w-3 h-3 rounded-full bg-[#FF5F57] border border-[#E0443E]" />
@@ -102,20 +102,17 @@ export default function ShelfClient({ items }: { items: ShelfItem[] }) {
 
             {/* Toolbar icons (decorative) */}
             <div className="hidden md:flex items-center gap-3 ml-auto text-gray-400">
-              {/* Grid view icon */}
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                 <rect x="1" y="1" width="6" height="6" rx="1" stroke="currentColor" strokeWidth="1.2"/>
                 <rect x="9" y="1" width="6" height="6" rx="1" stroke="currentColor" strokeWidth="1.2"/>
                 <rect x="1" y="9" width="6" height="6" rx="1" stroke="currentColor" strokeWidth="1.2"/>
                 <rect x="9" y="9" width="6" height="6" rx="1" stroke="currentColor" strokeWidth="1.2"/>
               </svg>
-              {/* List view icon */}
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                 <line x1="1" y1="3" x2="15" y2="3" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
                 <line x1="1" y1="8" x2="15" y2="8" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
                 <line x1="1" y1="13" x2="15" y2="13" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
               </svg>
-              {/* Search icon */}
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                 <circle cx="7" cy="7" r="4.5" stroke="currentColor" strokeWidth="1.2"/>
                 <line x1="10.5" y1="10.5" x2="14" y2="14" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
@@ -124,9 +121,9 @@ export default function ShelfClient({ items }: { items: ShelfItem[] }) {
           </div>
 
           {/* ===== Body: sidebar + content ===== */}
-          <div className="flex bg-white" style={{ minHeight: "70vh" }}>
+          <div className="flex bg-white">
             {/* Sidebar — hidden on mobile */}
-            <div className="hidden md:flex flex-col w-[160px] bg-[#F5F3F0] border-r border-black/[0.05] py-4 px-3 flex-shrink-0">
+            <div className="hidden md:flex flex-col w-[160px] bg-[#F5F3F0] border-r border-black/[0.05] py-4 px-3 flex-shrink-0 self-stretch">
               {/* Favorites */}
               <span className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider px-2 mb-1.5">
                 Favorites
@@ -175,19 +172,16 @@ export default function ShelfClient({ items }: { items: ShelfItem[] }) {
               </div>
             </div>
 
-            {/* Content area — scattered items */}
-            <div className="flex-1 relative overflow-hidden" style={{ minHeight: "65vh" }}>
-              {/* Scale wrapper for mobile */}
-              <div className="absolute inset-0 origin-top-left scale-[0.6] sm:scale-[0.8] md:scale-100 w-[167%] h-[167%] sm:w-[125%] sm:h-[125%] md:w-full md:h-full">
-                {layoutItems.map((item, i) => (
-                  <ShelfCard
-                    key={item.id}
-                    item={item}
-                    index={i}
-                    onClick={() => setSelectedItem(item)}
-                  />
-                ))}
-              </div>
+            {/* Content area — scrollable scattered items */}
+            <div className="flex-1 relative" style={{ height: contentH }}>
+              {layoutItems.map((item, i) => (
+                <ShelfCard
+                  key={item.id}
+                  item={item}
+                  index={i}
+                  onClick={() => setSelectedItem(item)}
+                />
+              ))}
             </div>
           </div>
         </motion.div>
