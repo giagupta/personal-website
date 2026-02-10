@@ -10,9 +10,9 @@ interface ShelfCardProps {
 }
 
 const sizeMap = {
-  sm: { wrapper: "w-16 h-16", image: 56 },
-  md: { wrapper: "w-24 h-24", image: 80 },
-  lg: { wrapper: "w-32 h-32", image: 110 },
+  sm: { w: 90, h: 90 },
+  md: { w: 120, h: 130 },
+  lg: { w: 155, h: 165 },
 };
 
 export default function ShelfCard({ item, index, onClick }: ShelfCardProps) {
@@ -27,43 +27,54 @@ export default function ShelfCard({ item, index, onClick }: ShelfCardProps) {
         left: `${item.position.x}%`,
         top: `${item.position.y}%`,
       }}
-      initial={{ opacity: 0, scale: 0.6 }}
+      initial={{ opacity: 0, scale: 0.7, rotate: rotation }}
       animate={{ opacity: 1, scale: 1, rotate: rotation }}
       transition={{
-        delay: 0.05 * index,
+        delay: 0.04 * index,
         duration: 0.5,
         type: "spring",
-        stiffness: 200,
-        damping: 18,
+        stiffness: 180,
+        damping: 16,
       }}
       whileHover={{
-        scale: 1.12,
+        scale: 1.08,
         rotate: 0,
         zIndex: 50,
         transition: { duration: 0.2 },
       }}
-      whileTap={{ scale: 0.95 }}
+      whileTap={{ scale: 0.96 }}
     >
-      <div className={`${s.wrapper} flex items-center justify-center`}>
+      {/* White card frame */}
+      <div
+        className="bg-white rounded-sm shadow-md group-hover:shadow-xl transition-shadow duration-200 p-1.5"
+        style={{ width: s.w, height: s.h }}
+      >
         {item.imageUrl ? (
           <img
             src={item.imageUrl}
             alt={item.name}
-            className="max-w-full max-h-full object-contain drop-shadow-md group-hover:drop-shadow-xl transition-all duration-200"
-            style={{ width: s.image, height: s.image }}
+            className="w-full h-full object-cover rounded-[1px]"
           />
         ) : (
-          <span
-            className={`${item.size === "lg" ? "text-7xl" : item.size === "md" ? "text-5xl" : "text-4xl"} drop-shadow-sm group-hover:drop-shadow-lg transition-all duration-200`}
-          >
-            {item.emoji}
-          </span>
+          <div className="w-full h-full flex items-center justify-center bg-gray-50 rounded-[1px]">
+            <span
+              className={`${
+                item.size === "lg"
+                  ? "text-6xl"
+                  : item.size === "md"
+                  ? "text-5xl"
+                  : "text-3xl"
+              }`}
+            >
+              {item.emoji}
+            </span>
+          </div>
         )}
       </div>
 
-      {/* Name — only on hover */}
-      <div className="absolute left-1/2 -translate-x-1/2 -bottom-5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
-        <span className="text-[10px] text-charcoal/50 bg-cream/90 px-1.5 py-0.5 rounded">
+      {/* Label — always visible */}
+      <div className="mt-1.5 flex items-center gap-1 justify-center">
+        <span className="text-[10px] text-charcoal/40 group-hover:text-charcoal/70 transition-colors whitespace-nowrap">
           {item.name}
         </span>
       </div>
