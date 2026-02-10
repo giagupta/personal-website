@@ -1,5 +1,8 @@
-import { redirect } from "next/navigation";
+import PageTransition from "@/components/PageTransition";
+import AboutClient from "./AboutClient";
+
+export const revalidate = 60;
 
 export default function AboutPage() {
-  redirect("/runs");
+  return <AboutClient />;
 }
