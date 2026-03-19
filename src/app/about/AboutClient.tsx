@@ -3,34 +3,6 @@
 import { motion } from "framer-motion";
 import PageTransition from "@/components/PageTransition";
 
-/* Placeholder work items — replace images with your own */
-const workSections = [
-  {
-    title: "Art",
-    items: [
-      { src: "/images/work/art-1.jpg", num: 1 },
-      { src: "/images/work/art-2.jpg", num: 2 },
-      { src: "/images/work/art-3.jpg", num: 3 },
-    ],
-  },
-  {
-    title: "Business",
-    items: [
-      { src: "/images/work/biz-1.jpg", num: 4 },
-      { src: "/images/work/biz-2.jpg", num: 5 },
-      { src: "/images/work/biz-3.jpg", num: 6 },
-    ],
-  },
-  {
-    title: "Research",
-    items: [
-      { src: "/images/work/res-1.jpg", num: 7 },
-      { src: "/images/work/res-2.jpg", num: 8 },
-      { src: "/images/work/res-3.jpg", num: 9 },
-    ],
-  },
-];
-
 export default function AboutClient() {
   return (
     <PageTransition>
@@ -108,71 +80,17 @@ export default function AboutClient() {
           <div className="aspect-[3/4] overflow-hidden bg-charcoal/[0.04]">
             <img
               src="/images/about-1.jpg"
-              alt=""
+              alt="In the trees"
               className="w-full h-full object-cover"
-              onError={(e) => {
-                (e.target as HTMLImageElement).style.display = "none";
-              }}
             />
           </div>
           <div className="aspect-[3/4] overflow-hidden bg-charcoal/[0.04]">
             <img
               src="/images/about-2.jpg"
-              alt=""
+              alt="On the subway"
               className="w-full h-full object-cover"
-              onError={(e) => {
-                (e.target as HTMLImageElement).style.display = "none";
-              }}
             />
           </div>
-        </motion.div>
-
-        {/* ── My Work ── */}
-        <motion.div
-          className="mt-20"
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3, duration: 0.5 }}
-        >
-          <h2 className="font-serif text-2xl md:text-3xl font-normal text-charcoal tracking-[-0.01em]">
-            My Work
-          </h2>
-
-          {workSections.map((section, si) => (
-            <motion.div
-              key={section.title}
-              className="mt-10"
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.35 + si * 0.08, duration: 0.5 }}
-            >
-              {/* Section subheader */}
-              <p className="font-serif text-charcoal/50 italic text-sm md:text-base mb-4 tracking-wide">
-                {section.title}
-              </p>
-
-              {/* 3-col photo grid */}
-              <div className="grid grid-cols-3 gap-2.5">
-                {section.items.map((item) => (
-                  <div key={item.num}>
-                    <div className="aspect-[4/3] overflow-hidden bg-charcoal/[0.04]">
-                      <img
-                        src={item.src}
-                        alt={`${section.title} ${item.num}`}
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).style.display = "none";
-                        }}
-                      />
-                    </div>
-                    <p className="mt-1.5 text-center font-serif italic text-charcoal/35 text-xs">
-                      ({item.num})
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-          ))}
         </motion.div>
       </div>
     </PageTransition>
