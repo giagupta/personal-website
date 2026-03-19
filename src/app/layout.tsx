@@ -16,7 +16,7 @@ export default function RootLayout({
     <html lang="en">
       <body className="paper-texture min-h-screen">
         <Navigation />
-        <main className="pt-16">{children}</main>
+        <main>{children}</main>
       </body>
     </html>
   );
