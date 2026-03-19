@@ -24,20 +24,38 @@ export default function AboutClient() {
           transition={{ delay: 0.08, duration: 0.5 }}
         >
           <p>
-            I&rsquo;m interested in understanding intelligence as a tool for
-            solving problems and coming up with good new ideas. Aligned AI,
-            robotics, &amp; neurotech seem like promising ways to help humanity
-            make progress. I&rsquo;m deeply passionate about pursuing poetic and
-            scientific truths. Whatever I do, I hope to do it with love,
-            humility, curiosity &amp; a boundless sense of wonder at the miracles
-            and beauty of the universe.
+            I&rsquo;m interested in understanding how to build intelligence that
+            can solve scientific discovery and general problem-solving. I hope to
+            contribute to building this type of intelligence and other beautiful
+            things that elegantly solve big questions.
+          </p>
+
+          <p>
+            I&rsquo;m deeply passionate about pursuing poetic and scientific
+            truths. I think I am both a poet and scientist at heart! I aim to
+            live with love, optimism, patience &amp; a boundless sense of wonder
+            at the miracles and beauty of the universe.
+          </p>
+
+          <p>
+            I can usually be found smiling in the sun, looking for new coffee
+            shops, reading a new book, looking at the stars, or running very very
+            slowly.
           </p>
 
           <p>Outside of that I&rsquo;m:</p>
           <ul className="space-y-0.5 ml-1">
             <li className="flex items-start gap-2">
               <span className="text-charcoal/30 mt-[2px]">&bull;</span>
-              Host an art pop-up concept called In The Margins
+              Host an art pop-up concept called{" "}
+              <a
+                href="https://www.instagram.com/intheemargins/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-charcoal/80 underline underline-offset-[3px] decoration-charcoal/25 hover:decoration-charcoal/50 transition-colors"
+              >
+                In The Margins
+              </a>
             </li>
             <li className="flex items-start gap-2">
               <span className="text-charcoal/30 mt-[2px]">&bull;</span>
