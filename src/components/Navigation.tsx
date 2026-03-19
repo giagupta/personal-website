@@ -4,35 +4,36 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const links = [
-  { href: "/about", label: "About" },
-  { href: "/runs", label: "Wanders" },
-  { href: "/shelf", label: "Shelf" },
-  { href: "/blog", label: "Writing" },
+  { href: "/about", label: "about" },
+  { href: "/blog", label: "writing" },
 ];
 
 export default function Navigation() {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-40 bg-cream/95 backdrop-blur-sm border-b border-charcoal/5">
-      <div className="max-w-6xl mx-auto px-6 py-4 flex items-start gap-10">
+    <nav className="w-full pt-8 pb-4 md:pt-12 md:pb-6">
+      <div className="flex flex-col items-center gap-4">
+        {/* Centered title */}
         <Link
           href="/"
-          className="text-sm font-medium text-charcoal tracking-wide"
+          className="font-serif text-2xl md:text-3xl text-charcoal tracking-[-0.01em]"
         >
-          Gia
+          Gia Gupta
         </Link>
-        <div className="flex flex-col gap-0.5">
+
+        {/* Horizontal links */}
+        <div className="flex items-center gap-8 md:gap-12">
           {links.map((link) => {
             const isActive = pathname === link.href;
             return (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`text-sm transition-colors ${
+                className={`text-sm md:text-[15px] underline underline-offset-[3px] transition-colors ${
                   isActive
-                    ? "text-charcoal"
-                    : "text-charcoal/35 hover:text-charcoal"
+                    ? "text-charcoal decoration-charcoal/40"
+                    : "text-charcoal/60 decoration-charcoal/25 hover:text-charcoal hover:decoration-charcoal/40"
                 }`}
               >
                 {link.label}
